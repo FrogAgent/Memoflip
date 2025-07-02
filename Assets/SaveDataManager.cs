@@ -82,9 +82,14 @@ public class SaveDataManager : MonoBehaviour
         // Wait for animation to complete
         yield return new WaitForSeconds(exitAnimationTime);
         
-        // Then clear data and change scene
+        // Clear all game data
         PlayerPrefs.DeleteAll();
         PlayerPrefs.Save();
+        
+        // Reset cursor to default
+        CursorManager.ClearAllCursorData();
+        
+        // Load main menu
         SceneManager.LoadScene(mainMenuScene);
     }
 }

@@ -29,6 +29,8 @@ public class CursorManager : MonoBehaviour
 
     public void ApplySavedCursor(int index)
     {
+        index = Mathf.Clamp(index, 0, customCursors.Length);
+        
         if (index == 0)
         {
             // Default system cursor
@@ -44,7 +46,30 @@ public class CursorManager : MonoBehaviour
             else
             {
                 Debug.LogWarning($"Cursor texture at index {index - 1} not assigned.");
+                // Fallback to default cursor
+                Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
             }
+        }
+    }
+
+    public void ResetToDefaultCursor()
+    {
+        PlayerPrefs.SetInt(CursorPrefKey, 0);
+        PlayerPrefs.Save();
+        ApplySavedCursor(0);
+    }
+
+    public static void ClearAllCursorData()
+    {
+        if (Instance != null)
+        {
+            Instance.ResetToDefaultCursor();
+        }
+        else
+        {
+            PlayerPrefs.DeleteKey(CursorPrefKey);
+            PlayerPrefs.Save();
+            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
         }
     }
 }
