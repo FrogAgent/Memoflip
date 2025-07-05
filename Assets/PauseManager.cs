@@ -1,14 +1,21 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PauseManager : MonoBehaviour
 {
-    public GameObject pauseMenu;        // Assign Pause Menu Panel in Inspector
-    public GameObject darkOverlay;      // Assign dark background overlay
-    public GameObject scoreLabelGO;     // Assign Score Text GameObject
-    public GameObject coinImageGO;      // Assign Coin Image GameObject
-    public GameObject pointsTextGO;     // Assign Points Text GameObject
-    public GameObject timeLimitTextGO;  // Assign TimeLimit Text GameObject
+    [Header("UI References")]
+    public GameObject pauseMenu;
+    public GameObject darkOverlay;
+    public GameObject scoreLabelGO;
+    public GameObject coinImageGO;
+    public GameObject pointsTextGO;
+    public GameObject timeLimitTextGO;
+    
+    [Header("Card Grid Buttons")]
+    public Button enlargeGridButton;
+    public Button shrinkGridButton;
+    public Button resetGridButton;
 
     private bool isPaused = false;
 
@@ -51,7 +58,11 @@ public class PauseManager : MonoBehaviour
         isPaused = true;
         pauseMenu.SetActive(true);
         darkOverlay.SetActive(true);
-        SetScoreUIVisible(false); // Always hide score UI when paused
+        SetScoreUIVisible(false);
+        
+        // Hide grid control buttons when paused
+        SetGridButtonsVisible(false);
+        
         Time.timeScale = 0f;
     }
 
@@ -68,6 +79,9 @@ public class PauseManager : MonoBehaviour
             SetScoreUIVisible(true);
         }
 
+        // Show grid control buttons when resuming
+        SetGridButtonsVisible(true);
+        
         Time.timeScale = 1f;
     }
 
@@ -77,6 +91,18 @@ public class PauseManager : MonoBehaviour
         if (coinImageGO != null) coinImageGO.SetActive(isVisible);
         if (pointsTextGO != null) pointsTextGO.SetActive(isVisible);
         if (timeLimitTextGO != null) timeLimitTextGO.SetActive(isVisible);
+    }
+
+    private void SetGridButtonsVisible(bool isVisible)
+    {
+        if (enlargeGridButton != null) enlargeGridButton.gameObject.SetActive(isVisible);
+        if (shrinkGridButton != null) shrinkGridButton.gameObject.SetActive(isVisible);
+        if (resetGridButton != null) resetGridButton.gameObject.SetActive(isVisible);
+    }
+
+    public bool IsGamePaused()
+    {
+        return isPaused;
     }
 
     public void OnRestartButtonClick()
